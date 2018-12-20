@@ -19,3 +19,7 @@ The output will be dictionary with the key as directory name and value as no.of 
 
 2. plot_graph: This function takes dictionary type input and displays a plot with x-axis as directory name and y-axis as a bar graph with 
 no.of times the keyword occurs.
+
+
+Test module tests three test cases.
+One for validating valid dirname, keyword and expected output. Other for testing exception handling and rest for testing valid keyword. 
