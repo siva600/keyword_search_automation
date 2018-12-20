@@ -5,9 +5,18 @@ import argparse
 import matplotlib.pyplot as plt
 
 
+# find_keywords function with walk through directory and subdirectories to find keyword in all files.
+# The output will be dictionary with the key as directory name and value as no.of times the keyword
+# appeared in the directory. Arguments as directory name and keyword.
 def find_keywords(root_dir, keyword):
         keyword_count = {}
-        for dirName, subdirList, fileList in os.walk(root_dir, onerror=None):
+        if not os.path.exists(root_dir):
+            raise Exception("invalid dirname")
+
+        if not keyword:
+            raise Exception("Keyword is required")
+
+        for dirName, subdirList, fileList in os.walk(root_dir):
             for filename in fileList:
                 count = 0
                 try:
@@ -23,7 +32,6 @@ def find_keywords(root_dir, keyword):
 
                 except Exception as e:
                     print(e)
-
         return keyword_count
 
 
