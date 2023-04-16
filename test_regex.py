@@ -43,7 +43,7 @@ def extract_dataframe(string):
     return df
 
 
-string = "usrUpdProfileSvr -Q usrUpdProfile1 -s UsrSetProfile:USER_SET_PROFILE -s UsrDelProfile:USER_DELETE_PROFILE - -SUSDTUAT -LY -Utuxuser -Ptuxedo -OBETA -DUsUserProfileDB"
+string = "usrUpdProfileSvrr -Q usrUpdProfile11 -s UsrSetProfilee:USER_SET_PROFILEE -s UsrDelProfilee:USER_DELETE_PROFILEE - -KSUSDTUATT -LY -Utuxuser -Pttuxedo -OBETA -DUUsUserProfileDBo"
 df = extract_dataframe(string)
 
 
