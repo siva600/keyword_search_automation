@@ -112,3 +112,14 @@ def extract_params(input_str):
             ])
     
     return output
+
+
+def extract_jar_name(text):
+    match = re.search(r'-cp\s+(.*?\.jar)', text)
+    if match:
+        jar_file = match.group(1)
+        jar_name = jar_file.split('/')[-1][:-4]
+        return jar_name
+    else:
+        return None
+    
