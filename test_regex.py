@@ -2,6 +2,23 @@ import re
 
 import configparser
 
+from configparser import ConfigParser
+
+class MyParser(ConfigParser):
+    def __init__(self):
+        super().__init__()
+
+    def _read(self, fp, fpname):
+        lines = fp.readlines()
+        lines = [line for line in lines if not line.strip().startswith(';')]
+        lines = [line for line in lines if not line.strip().startswith('#')]
+        fp = io.StringIO(''.join(lines))
+        super()._read(fp, fpname)
+
+parser = MyParser()
+parser.read('test_conf.conf')
+
+
 def extract_config_data(filename):
     # create configparser object
     config = configparser.ConfigParser()
