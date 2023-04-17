@@ -1,49 +1,66 @@
-import pandas as pd
+import re
 
-def extract_parameters(string):
-    # Define a regular expression pattern to match the parameter values
-    pattern = r"-Q\s+([^-\s]+)\s+-s\s+([^-\s]+)\s+-s\s+([^-\s]+)\s+-U\s+([^-\s]+)\s+-P\s+([^-\s]+)\s+-D\s+([^-\s]+)"
-
-    # Use re.search to find the first occurrence of the pattern in the string
-    match = re.search(pattern, string)
-
-    if match:
-        # Extract the values for the -Q, -s, -U, -P, and -D parameters
-        q_value = match.group(1)
-        s_value_1, s_value_2 = match.group(2).split(':')
-        s_value_3, s_value_4 = match.group(3).split(':')
-        u_value = match.group(4)
-        p_value = match.group(5)
-        d_value = match.group(6)
-
-        return {
-            "-Q": q_value,
-            "-s1": s_value_1,
-            "-s2": s_value_2,
-            "-s3": s_value_3,
-            "-s4": s_value_4,
-            "-U": u_value,
-            "-P": p_value,
-            "-D": d_value,
-        }
+def extract_params(input_str):
+    if input_str.startswith('java'):
+        # Define regular expressions for each parameter in the Java command
+        logical_db_re = r'-D(\w+)'
+        service_re = r'-s\s+([\w:]+)'
+        classpath_re = r'-cp\s+([\w/.:*]+)'
+        
+        # Find all matches for each parameter
+        logical_db_match = re.search(logical_db_re, input_str)
+        service_matches = re.findall(service_re, input_str)
+        classpath_match = re.search(classpath_re, input_str)
+        
+        # Extract the parameter values from the matches
+        logical_db = logical_db_match.group(1) if logical_db_match else ''
+        services = [[s.split(':')[0], s.split(':')[1]] for s in service_matches] if service_matches else []
+        classpath = classpath_match.group(1) if classpath_match else ''
+        server_name = ''
+        if classpath:
+            jar_files = classpath.split(':')
+            for jar_file in jar_files:
+                if jar_file.endswith('.jar'):
+                    server_name = jar_file.split('/')[-1][:-4]
+                    break
+        
+        # Create a list of lists, one for each service match
+        output = []
+        for service in services:
+            output.append([
+                logical_db,
+                service[0],
+                service[1],
+                server_name,
+                ''
+            ])
     else:
-        return None
-
-def extract_dataframe(string):
-    # Extract the parameters from the string
-    params = extract_parameters(string)
+        # Define regular expressions for each parameter in the Tuxedo command
+        logical_db_re = r'-D(\w+)'
+        service_re = r'-s\s+([\w:]+)'
+        server_name_re = r'-Q\s+(\w+)'
+        s2_server_name_re = r'\s+(\w+)\s+-Q'
+        
+        # Find all matches for each parameter
+        logical_db_match = re.search(logical_db_re, input_str)
+        service_matches = re.findall(service_re, input_str)
+        server_name_match = re.search(server_name_re, input_str)
+        s2_server_name_match = re.search(s2_server_name_re, input_str)
+        
+        # Extract the parameter values from the matches
+        logical_db = logical_db_match.group(1) if logical_db_match else ''
+        services = [[s.split(':')[0], s.split(':')[1]] for s in service_matches] if service_matches else []
+        server_name = server_name_match.group(1) if server_name_match else ''
+        s2_server_name = s2_server_name_match.group(1) if s2_server_name_match else ''
+        
+        # Create a list of lists, one for each service match
+        for service in services:
+            output.append([
+                logical_db,
+                service[0],
+                service[1],
+                server_name,
+                s2_server_name
+            ])
     
-    if not params:
-        print("No match found")
-        return None
-    
-    # Create a pandas DataFrame from the parameters dictionary
-    df = pd.DataFrame(params, index=[0])
-    
-    return df
-
-
-string = "usrUpdProfileSvrr -Q usrUpdProfile11 -s UsrSetProfilee:USER_SET_PROFILEE -s UsrDelProfilee:USER_DELETE_PROFILEE - -KSUSDTUATT -LY -Utuxuser -Pttuxedo -OBETA -DUUsUserProfileDBo"
-df = extract_dataframe(string)
-
-
+    return output
