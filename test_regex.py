@@ -25,6 +25,7 @@ def extract_config_data(filename):
     
     return data
 
+import re
 
 def extract_params(input_str):
     if input_str.startswith('java'):
@@ -60,6 +61,16 @@ def extract_params(input_str):
                 server_name,
                 ''
             ])
+            
+        # If no services were found, add a default "UNKNOWN" service to the output list
+        if not services:
+            output.append([
+                logical_db,
+                "UNKNOWN",
+                "UNKNOWN",
+                server_name,
+                ''
+            ])
     else:
         # Define regular expressions for each parameter in the Tuxedo command
         logical_db_re = r'-D(\w+)'
@@ -80,11 +91,22 @@ def extract_params(input_str):
         s2_server_name = s2_server_name_match.group(1) if s2_server_name_match else ''
         
         # Create a list of lists, one for each service match
+        output = []
         for service in services:
             output.append([
                 logical_db,
                 service[0],
                 service[1],
+                server_name,
+                s2_server_name
+            ])
+        
+        # If no services were found, add a default "UNKNOWN" service to the output list
+        if not services:
+            output.append([
+                logical_db,
+                "UNKNOWN",
+                "UNKNOWN",
                 server_name,
                 s2_server_name
             ])
