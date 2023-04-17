@@ -1,5 +1,31 @@
 import re
 
+import configparser
+
+def extract_config_data(filename):
+    # create configparser object
+    config = configparser.ConfigParser()
+    
+    # read the config file
+    config.read(filename)
+    
+    data = []
+    
+    # loop through each section in the config file
+    for section in config.sections():
+        # extract the required data from the section
+        command = config.get(section, 'command')
+        min = config.get(section, 'minimum')
+        max = config.get(section, 'numprocs')
+        db_group = config.get(section, 'group')
+        type = config.get(section, 'type')
+        
+        # append the data to the list
+        data.append([command, min, max, db_group, type])
+    
+    return data
+
+
 def extract_params(input_str):
     if input_str.startswith('java'):
         # Define regular expressions for each parameter in the Java command
