@@ -93,7 +93,7 @@ def extract_params(input_str):
         logical_db_re = r'-D(\w+)'
         service_re = r'-s\s+([\w:]+)'
         server_name_re = r'-Q\s+(\w+)'
-        s2_server_name_re = r'\s+(\w+)\s+-Q'
+        s2_server_name_re = r'^((?:(?!/)\S)+)'
         
         # Find all matches for each parameter
         logical_db_match = re.search(logical_db_re, input_str)
