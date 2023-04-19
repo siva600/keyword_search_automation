@@ -1,0 +1,3 @@
+set -o pipefail
+etmd -a adminuser ettimeout -t ${TIMEOUT} ssh root@$ {NODE} "(cd $dir; tar --owner=rade --group rade --mode 755 -xmvf ${ROLL_PATH}/${tarfilename}; chown -R rade:rade $dir; [[ "$packageName" = cfg* 1] && chmod -R 2770 $dir || chmod -R 755 $dir)" | tee output.log
+
