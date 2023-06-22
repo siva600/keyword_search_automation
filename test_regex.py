@@ -3,6 +3,28 @@ import re
 import configparser
 
 from configparser import ConfigParser
+import re
+
+def parse_options(input_param):
+    options = ()
+
+    # Regex pattern to match -c and -t options followed by their values
+    pattern = r'-c\s+([^-\s]+)\s+-t\s+([^-\s]+)'
+
+    # Search for the pattern in the input_param string
+    match = re.search(pattern, input_param)
+
+    if match:
+        options = (match.group(1), match.group(2))
+
+    return options
+
+# Example usage
+input_param = "-c statusgrp -t \"GRP_AuthenDB_ro\""
+parsed_options = parse_options(input_param)
+print(parsed_options)
+
+
 
 class MyParser(ConfigParser):
     def __init__(self):
