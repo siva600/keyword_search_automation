@@ -1,9 +1,115 @@
+input_json = {
+    'plugin': {
+        'params': {
+            'instset': [{
+                'cmd': '-c statusgrp -t ""GRP_UsUserProfileDB"" -l "sit592w88m7" -i "sit:api:s2:detsvc" -u auto -s 1687460254032_7edfa1e5-1703-45a7-9557',
+                'inst': 'sit:api:s2:detsvc',
+                'host': 'sit592w88m7',
+                'object': '"GRP_UsUserProfileDB"'
+            }]
+        }
+    },
+    'group': '7448',
+    'timestamp': '1687460254032_7edfa1e5-1703-45a7-9557',
+    'mode': 'last',
+    'requestor': 'auto',
+    'type': 'bladmin',
+    'id': 'em_plugin',
+    'node': 'bl1w80m7',
+    'instance': 'uat:bladmin:agt:wfcelery_p3',
+    'grouptype': 'em'
+}
+
+# Extract parameters from the input JSON
+instset_cmd = input_json['plugin']['params']['instset'][0]['cmd']
+group = input_json.get('group', '')
+timestamp = input_json.get('timestamp', '')
+mode = input_json.get('mode', '')
+requestor = input_json.get('requestor', '')
+type_ = input_json.get('type', '')
+id_ = input_json.get('id', '')
+node = input_json.get('node', '')
+instance = input_json.get('instance', '')
+grouptype = input_json.get('grouptype', '')
+
+# Construct the desired output string
+output = '{"plugin": {"params": {"instset": [{"cmd": ' + repr(instset_cmd) + '}]}}' \
+         ', "group": ' + repr(group) + \
+         ', "timestamp": ' + repr(timestamp) + \
+         ', "mode": ' + repr(mode) + \
+         ', "requestor": ' + repr(requestor) + \
+         ', "type": ' + repr(type_) + \
+         ', "id": ' + repr(id_) + \
+         ', "node": ' + repr(node) + \
+         ', "instance": ' + repr(instance) + \
+         ', "grouptype": ' + repr(grouptype) + '}'
+
+# Add double quotes to the output string
+output = '"' + output + '"'
+
+print(output)
+
+
+.....
+
+
 import re
 
 import configparser
 
 from configparser import ConfigParser
 import re
+
+input_json = {
+    'plugin': {
+        'params': {
+            'instset': [{
+                'cmd': '-c statusgrp -t ""GRP_UsUserProfileDB"" -l "sit592w88m7" -i "sit:api:s2:detsvc" -u auto -s 1687460254032_7edfa1e5-1703-45a7-9557',
+                'inst': 'sit:api:s2:detsvc',
+                'host': 'sit592w88m7',
+                'object': '"GRP_UsUserProfileDB"'
+            }]
+        }
+    },
+    'group': '7448',
+    'timestamp': '1687460254032_7edfa1e5-1703-45a7-9557',
+    'mode': 'last',
+    'requestor': 'auto',
+    'type': 'bladmin',
+    'id': 'em_plugin',
+    'node': 'bl1w80m7',
+    'instance': 'uat:bladmin:agt:wfcelery_p3',
+    'grouptype': 'em'
+}
+
+# Extract parameters from the input JSON
+instset_cmd = input_json['plugin']['params']['instset'][0]['cmd']
+group = input_json.get('group', '')
+timestamp = input_json.get('timestamp', '')
+mode = input_json.get('mode', '')
+requestor = input_json.get('requestor', '')
+type_ = input_json.get('type', '')
+id_ = input_json.get('id', '')
+node = input_json.get('node', '')
+instance = input_json.get('instance', '')
+grouptype = input_json.get('grouptype', '')
+
+# Construct the desired output string
+output = '{"plugin": {"params": {"instset": [{"cmd": ' + repr(instset_cmd) + '}]}}' \
+         ', "group": ' + repr(group) + \
+         ', "timestamp": ' + repr(timestamp) + \
+         ', "mode": ' + repr(mode) + \
+         ', "requestor": ' + repr(requestor) + \
+         ', "type": ' + repr(type_) + \
+         ', "id": ' + repr(id_) + \
+         ', "node": ' + repr(node) + \
+         ', "instance": ' + repr(instance) + \
+         ', "grouptype": ' + repr(grouptype) + '}'
+
+# Add double quotes to the output string
+output = '"' + output + '"'
+
+print(output)
 
 def parse_options(input_param):
     options = ()
