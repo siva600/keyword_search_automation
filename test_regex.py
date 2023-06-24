@@ -20,34 +20,43 @@ input_json = {
     'grouptype': 'em'
 }
 
-# Extract parameters from the input JSON
-instset_cmd = input_json['plugin']['params']['instset'][0]['cmd']
-group = input_json.get('group', '')
-timestamp = input_json.get('timestamp', '')
-mode = input_json.get('mode', '')
-requestor = input_json.get('requestor', '')
-type_ = input_json.get('type', '')
-id_ = input_json.get('id', '')
-node = input_json.get('node', '')
-instance = input_json.get('instance', '')
-grouptype = input_json.get('grouptype', '')
+# Helper function to escape backslashes and double quotes
+def escape_string(s):
+    s = s.replace('\\', '\\\\')
+    s = s.replace('"', '\\"')
+    return s
 
-# Replace double quotes with escaped double quotes
-instset_cmd = instset_cmd.replace('"', '\\"')
-group = group.replace('"', '\\"')
-timestamp = timestamp.replace('"', '\\"')
-mode = mode.replace('"', '\\"')
-requestor = requestor.replace('"', '\\"')
-type_ = type_.replace('"', '\\"')
-id_ = id_.replace('"', '\\"')
-node = node.replace('"', '\\"')
-instance = instance.replace('"', '\\"')
-grouptype = grouptype.replace('"', '\\"')
+# Extract parameters from the input JSON and escape backslashes and double quotes
+instset_cmd = escape_string(input_json['plugin']['params']['instset'][0]['cmd'])
+group = escape_string(input_json.get('group', ''))
+timestamp = escape_string(input_json.get('timestamp', ''))
+mode = escape_string(input_json.get('mode', ''))
+requestor = escape_string(input_json.get('requestor', ''))
+type_ = escape_string(input_json.get('type', ''))
+id_ = escape_string(input_json.get('id', ''))
+node = escape_string(input_json.get('node', ''))
+instance = escape_string(input_json.get('instance', ''))
+grouptype = escape_string(input_json.get('grouptype', ''))
 
 # Construct the desired output string
-output = '\'{"plugin": {"params": {"instset": [{"cmd": ""' + instset_cmd + '""}]}}, "group": "' + group + '", "timestamp": "' + timestamp + '", "mode": "' + mode + '", "requestor": "' + requestor + '", "type": "' + type_ + '", "id": "' + id_ + '", "node": "' + node + '", "instance": "' + instance + '", "grouptype": "' + grouptype + '"}}\''
+output = '\'\\{{"plugin": {{"params": {{"instset": [{{"cmd": "{instset_cmd}","inst": "{instset_inst}","host": "{instset_host}","object": "{instset_object}"}}]}}, "group": "{group}", "timestamp": "{timestamp}", "mode": "{mode}", "requestor": "{requestor}", "type": "{type_}", "id": "{id_}", "node": "{node}", "instance": "{instance}", "grouptype": "{grouptype}"}}\\}}\''.format(
+    instset_cmd=instset_cmd,
+    instset_inst=input_json['plugin']['params']['instset'][0]['inst'],
+    instset_host=input_json['plugin']['params']['instset'][0]['host'],
+    instset_object=input_json['plugin']['params']['instset'][0]['object'],
+    group=group,
+    timestamp=timestamp,
+    mode=mode,
+    requestor=requestor,
+    type_=type_,
+    id_=id_,
+    node=node,
+    instance=instance,
+    grouptype=grouptype
+)
 
 print(output)
+
 
 
 .....
