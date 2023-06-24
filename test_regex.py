@@ -32,20 +32,20 @@ node = input_json.get('node', '')
 instance = input_json.get('instance', '')
 grouptype = input_json.get('grouptype', '')
 
-# Construct the desired output string
-output = '{"plugin": {"params": {"instset": [{"cmd": ' + repr(instset_cmd) + '}]}}' \
-         ', "group": ' + repr(group) + \
-         ', "timestamp": ' + repr(timestamp) + \
-         ', "mode": ' + repr(mode) + \
-         ', "requestor": ' + repr(requestor) + \
-         ', "type": ' + repr(type_) + \
-         ', "id": ' + repr(id_) + \
-         ', "node": ' + repr(node) + \
-         ', "instance": ' + repr(instance) + \
-         ', "grouptype": ' + repr(grouptype) + '}'
+# Replace double quotes with escaped double quotes
+instset_cmd = instset_cmd.replace('"', '\\"')
+group = group.replace('"', '\\"')
+timestamp = timestamp.replace('"', '\\"')
+mode = mode.replace('"', '\\"')
+requestor = requestor.replace('"', '\\"')
+type_ = type_.replace('"', '\\"')
+id_ = id_.replace('"', '\\"')
+node = node.replace('"', '\\"')
+instance = instance.replace('"', '\\"')
+grouptype = grouptype.replace('"', '\\"')
 
-# Add double quotes to the output string
-output = '"' + output + '"'
+# Construct the desired output string
+output = '\'{"plugin": {"params": {"instset": [{"cmd": ""' + instset_cmd + '""}]}}, "group": "' + group + '", "timestamp": "' + timestamp + '", "mode": "' + mode + '", "requestor": "' + requestor + '", "type": "' + type_ + '", "id": "' + id_ + '", "node": "' + node + '", "instance": "' + instance + '", "grouptype": "' + grouptype + '"}}\''
 
 print(output)
 
